@@ -13,8 +13,18 @@
         <!--是否允许远程访问 默认是false-->
         <dubbo:parameter key="qos.accept.foreign.ip" value="false"/>
     </dubbo:application>
-    <dubbo:registry  address="zookeeper://192.168.230.130:2181?timeout=10000" />
-
+    <dubbo:registry address="zookeeper://192.168.100.129:2181?timeout=10000"/>
+    <!--dubbo:consumer 对消费者统一配置  以consumer为主  reference与consumer配置相同的属性 以consumer为主-->
+    <dubbo:consumer timeout="4000"/>
     <!--引用service服务-->
-    <dubbo:reference id="helloService" interface="com.lagou.service.HelloService" />
+    <!--mock=true 服务降级 是调用远程服务时 远程服务出现异常 在消费者超时前没有响应 那么就服务降级 调用本地的接口的实现类 返回默认值-->
+    <!--mock=true 启动前必须实现类实现服务接口(并且实现类与接口同包)返回默认值之前会抛出超时异常-->
+    <!-- timeout  如果 消费者和提供者同时定义了超时时间  consumer time>privider time 那么就对privider time做放宽(privider timeout 时间放宽到与消费者 超时时间一样)-->
+    <!--check=true . check: 用于在启动时，检查生产者是否有该服务。我们一般都会将这个值设置为false，不让其进
+     行检查。因为如果出现模块之间循环引用的话，那么则可能会出现相互依赖，都进行check的话，
+     那么这两个服务永远也启动不起来-->
+    <!-- retries=n(n为重试次数   实际n+1次操作之后才抛出异常(因为有一次是正常请求)): 用于指定当前服务在执行时出现错误或者超时时的重试机制。
+        1. 注意提供者是否有幂等，否则可能出现数据一致性问题
+        2. 注意提供者是否有类似缓存机制，如出现大面积错误时，可能因为不停重试导致雪崩-->
+    <dubbo:reference id="helloService" interface="com.lagou.service.HelloService"/>
 </beans>

@@ -7,8 +7,8 @@
        http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
     <dubbo:application name="service-provider"/>
     <dubbo:protocol name="dubbo" port="20880"/>
-    <dubbo:registry  address="zookeeper://192.168.230.130:2181?timeout=10000" />
+    <dubbo:registry  address="zookeeper://192.168.100.129:2181?timeout=10000" />
     <bean id="helloServiceImpl" class="com.lagou.service.HelloServiceImpl"/>
     <!--暴露service服务-->
-    <dubbo:service interface="com.lagou.service.HelloService" ref="helloServiceImpl"/>
+    <dubbo:service interface="com.lagou.service.HelloService" ref="helloServiceImpl" timeout="1000"/>
 </beans>
